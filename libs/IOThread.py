@@ -1,6 +1,7 @@
 import select
 from threading import Thread
 
+from Config import Config
 from libs.dataSet import DataSet
 from libs.logger import Logger
 from libs.socketSet import SocketSet
@@ -61,7 +62,7 @@ class ClientIOThread(Thread):
                 for inp in inputsReady:
                     if inp == self.socketSet.client:
                         try:
-                            data = self.socketSet.client.recv(409600)
+                            data = self.socketSet.client.recv(Config.SocketProperties.MAX_BUFF_SIZE)
                         except Exception as e:
                             self.logger.error(e)
                             self.logger.error("Error while receiving data from clientSocket. Thread stopped.")
@@ -73,7 +74,7 @@ class ClientIOThread(Thread):
                                     self.socketState = SocketState.DISCONNECTED
                     elif inp == self.socketSet.target:
                         try:
-                            data = self.socketSet.target.recv(409600)
+                            data = self.socketSet.target.recv(Config.SocketProperties.MAX_BUFF_SIZE)
                         except Exception as e:
                             self.logger.error(e)
                             self.logger.error("Error while receiving data from target. Thread stopped.")
